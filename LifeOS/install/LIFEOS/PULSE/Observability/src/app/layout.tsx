@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import AppHeader from "@/components/AppHeader";
 import ObserverScope from "@/components/ObserverScope";
 import SecurityBanner from "@/components/SecurityBanner";
+import { basePathShimScript } from "@/lib/basepath";
 import { observerScopeScript } from "@/lib/observer";
 import CommandPalette from "@/components/palette/CommandPalette";
 import TemplateOnboarding from "@/components/TemplateOnboarding";
@@ -30,6 +31,10 @@ export default function RootLayout({
         {/* Pre-paint: applies observer class + route scope before first render so
             a reload with observer on never flashes personal data. */}
         <script dangerouslySetInnerHTML={{ __html: observerScopeScript() }} />
+        {/* Behind a path prefix, the 80-odd fetch("/api/...") and EventSource
+            calls would escape it. One shim prefixes root-relative URLs instead
+            of touching every call site. No-op when PULSE_BASEPATH is unset. */}
+        <script dangerouslySetInnerHTML={{ __html: basePathShimScript() }} />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans`}>
         <Providers>
