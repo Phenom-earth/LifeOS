@@ -17,6 +17,9 @@
  *    /etc/hosts aliases that resolve to 127.0.0.1 (e.g. `pai`), so `http://pai:PORT` works.
  *    Opt-in, empty by default, and the port check below still applies. It slightly widens
  *    the rebinding surface to those exact names, so keep it to aliases only you control.
+ *    An entry written as `name:port` (e.g. `dev-matt:8443`) allows exactly that pair and no
+ *    other port. That is what a reverse proxy in front of Pulse sends when it rewrites Host
+ *    to an internal name; a rebinding page cannot produce it.
  *
  * The 127 match is a FULL DOTTED QUAD (`^127(?:\.\d{1,3}){3}$`), never a `/^127\./` prefix —
  * a prefix would let `127.0.0.1.evil.com` through, which is the exact rebinding shape.
@@ -33,6 +36,7 @@ function extraAllowedHosts(): string[] {
 export function isLoopbackHostHeader(hostHeader: string | null | undefined, port: number): boolean {
   if (!hostHeader || !hostHeader.trim()) return true; // header-less local CLI — allowed
   const h = hostHeader.trim().toLowerCase();
+  if (extraAllowedHosts().some((e) => e.includes(":") && !e.startsWith("[") && e === h)) return true;
 
   // Split host and optional :port. IPv6 literals are bracketed: [::1]:PORT.
   let bare: string;
@@ -53,7 +57,7 @@ export function isLoopbackHostHeader(hostHeader: string | null | undefined, port
     /^127(?:\.\d{1,3}){3}$/.test(bare) || // full quad, NOT a 127. prefix
     bare === "[::1]" ||
     bare === "::1" ||
-    extraAllowedHosts().includes(bare); // user-trusted local aliases (opt-in)
+    extraAllowedHosts().includes(bare); // user-trusted local aliases (opt-in; bare names only)
   if (!isLoopback) return false;
 
   // If a port is present it must be ours (defence in depth; absent port is fine).
