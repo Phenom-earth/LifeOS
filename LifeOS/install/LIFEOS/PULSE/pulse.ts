@@ -17,6 +17,7 @@ import { join } from "path"
 import { readFileSync, existsSync } from "fs"
 import { loadLifeosConfig } from "../TOOLS/LifeosConfig"
 import { isLoopbackHostHeader } from "./lib/host-guard.ts"
+import { stripBasePath } from "./lib/basepath.ts"
 
 // ── Load .env before anything else ──
 
@@ -812,8 +813,16 @@ async function main() {
     hostname: bindAll ? "0.0.0.0" : "127.0.0.1",
     port: config.port,
     async fetch(req) {
-      const url = new URL(req.url)
-      const pathname = url.pathname
+      let url = new URL(req.url)
+      // A UI built with PULSE_BASEPATH asks for /proxy/31337/_next/...; a proxy
+      // that strips the prefix hands us /_next/..., a direct local visit does
+      // not. Strip it here so both work against the same build.
+      const pathname = stripBasePath(url.pathname, process.env.PULSE_BASEPATH)
+      // Handlers below re-read req.url, so hand them the stripped request too.
+      if (pathname !== url.pathname) {
+        url = new URL(pathname + url.search, url)
+        req = new Request(url, req)
+      }
 
       // Anti-DNS-rebinding (loopback-only mode): reject any request whose Host header isn't
       // loopback. A rebinding page the user visits sends its own hostname; real local clients
