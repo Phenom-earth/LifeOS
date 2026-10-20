@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { withBasePath } from "@/lib/basepath";
 import { Menu, X, Cpu, Eye, EyeOff } from "lucide-react";
 import { useObserverMode } from "@/contexts/ObserverModeContext";
 import { TabFreshnessPill } from "@/components/TabFreshnessPill";
@@ -70,15 +71,17 @@ export default function AppHeader() {
   return (
     <header
       className="sticky top-0 z-50 backdrop-blur-md"
-      style={{ background: "rgba(6, 11, 26, 0.85)" }}
+      style={{ background: "color-mix(in srgb, var(--ground) 85%, transparent)" }}
     >
       {/* ── Tier 1 — persistent global nav (the only always-on menu) ── */}
       <div className="border-b border-line-1">
         <div className="max-w-[1920px] mx-auto px-4 sm:px-6">
           <div className="flex items-center min-h-14 py-1.5 gap-4 lg:gap-6">
             <Link href="/" className="flex items-center gap-3 shrink-0">
-              <Image src="/lifeos-logo.png" alt="LifeOS" width={28} height={28} className="h-7 w-7 object-contain" />
-              <span className="text-lg tracking-[0.25em] text-ink-1" style={{ fontFamily: "'advocate-c14', sans-serif", fontWeight: 600 }}>
+              {process.env.NEXT_PUBLIC_PULSE_THEME === "phenom"
+                ? <Image src={withBasePath("/themes/phenom/logo.svg")} alt="Phenom" width={28} height={28} className="h-7 w-7 object-contain" />
+                : <Image src="/lifeos-logo.png" alt="LifeOS" width={28} height={28} className="h-7 w-7 object-contain" />}
+              <span data-brand-name className="text-lg tracking-[0.25em] text-ink-1" style={{ fontFamily: "'advocate-c14', sans-serif", fontWeight: 600 }}>
                 PULSE
               </span>
             </Link>
@@ -171,7 +174,7 @@ export default function AppHeader() {
           "the section you're in", never as a second permanent global menu.
           Its lighter ground + "SYSTEM" rail make it visually distinct from Tier 1. ── */}
       {inSystem && (
-        <div className="border-b border-line-1" style={{ background: "rgba(15, 26, 51, 0.6)" }}>
+        <div className="border-b border-line-1" style={{ background: "color-mix(in srgb, var(--surface-1) 60%, transparent)" }}>
           <div className="max-w-[1920px] mx-auto px-4 sm:px-6">
             <div className="hidden md:flex items-start min-h-11 py-1.5 gap-3">
               <span
@@ -208,7 +211,7 @@ export default function AppHeader() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div ref={mobileMenuRef} className="md:hidden border-b border-line-1 backdrop-blur-md" style={{ background: "rgba(6, 11, 26, 0.95)" }}>
+        <div ref={mobileMenuRef} className="md:hidden border-b border-line-1 backdrop-blur-md" style={{ background: "color-mix(in srgb, var(--ground) 95%, transparent)" }}>
           <nav className="flex flex-col px-4 py-3 gap-1">
             <div className="text-xs uppercase tracking-wider text-ink-3 px-3 py-1">Sections</div>
             {tier1.map((item) => {

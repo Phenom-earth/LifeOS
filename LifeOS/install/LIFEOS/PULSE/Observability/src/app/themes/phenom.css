@@ -1,0 +1,85 @@
+/* ── Phenom LLC theme ──
+ * Opt-in with PULSE_THEME=phenom at build time (sets html[data-theme="phenom"]).
+ * Values come from the Phenom design tokens, Phenom-earth/www web/tokens.css:
+ * near-black ground, red #d73429 as the action colour, cyan #a5e3e8 as the
+ * highlight, Oswald for headings and Roboto Mono for text. Status and life
+ * dimension colours are left alone: they carry meaning, not brand.
+ * The html[data-theme] selector outranks :root and .dark, so this file only
+ * overrides tokens; pages keep consuming the same variables.
+ */
+
+@font-face { font-family: 'Oswald'; src: url('./phenom/oswald-latin.woff2') format('woff2'); font-weight: 200 700; font-display: swap; }
+@font-face { font-family: 'Roboto Mono'; src: url('./phenom/roboto-mono-latin.woff2') format('woff2'); font-weight: 100 700; font-display: swap; }
+
+html[data-theme="phenom"] {
+  /* Pulse tokens (globals.css) */
+  --ground: #121010;        /* color-neutral-pure-dark */
+  --surface-1: #151515;     /* color-neutral-surface */
+  --surface-2: #1a1a1a;     /* color-neutral-dark1 */
+  --surface-3: #222020;
+  --line-1: #211f1f;        /* ~ border-default, white 10% on ground */
+  --line-2: #2e2b2b;
+  --line-3: #3d3a3a;        /* ~ border-emphasis, white 20% */
+  --ink-1: #ffffff;
+  --ink-2: #aab1be;         /* color-neutral-gray */
+  --ink-3: #80868f;
+  --accent-blue: #d73429;   /* color-primary-red */
+  --accent-soft: #a5e3e8;   /* color-primary-cyan500 */
+  --neon-blue: #d73429;
+
+  /* telos v7 tokens (telos/_v7/styles.css), used across the dashboard pages */
+  --bg: #121010;
+  --bg-1: #1a1a1a;
+  --bg-2: #222020;
+  --bg-3: #2a2727;
+  --line: #2e2b2b;
+  --text: #ffffff;
+  --text-1: #e0e0e0;        /* color-neutral-light */
+  --text-2: #aab1be;
+  --text-3: #80868f;
+  --text-4: #5c6067;
+  --navy: #280402;          /* color-primary-red-active */
+  --azure: #d73429;
+  --sky: #a5e3e8;
+  --accent: #a5e3e8;        /* telos loads after globals, so --accent is this hex everywhere */
+  --accent-2: #d73429;
+
+  /* shadcn vars, the same palette as HSL triplets */
+  --background: 0 6% 7%;            /* #121010 */
+  --foreground: 0 0% 100%;
+  --card: 0 0% 10%;                 /* #1a1a1a */
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 8%;               /* #151515 */
+  --popover-foreground: 0 0% 100%;
+  --primary: 4 68% 50%;             /* #d73429 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 3% 13%;            /* #222020 */
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 3% 13%;
+  --muted-foreground: 219 12% 71%;  /* #aab1be */
+  --accent-foreground: 0 0% 100%;
+  --border: 0 3% 17%;               /* #2e2b2b */
+  --input: 0 3% 17%;
+  --ring: 4 68% 50%;
+  --radius: 0.75rem;                /* effect-border-radius-medium, 12px */
+  --chart-1: 4 68% 50%;             /* red */
+  --chart-2: 184 58% 78%;           /* cyan */
+}
+
+html[data-theme="phenom"] body {
+  font-family: 'Roboto Mono', 'Courier New', monospace;
+  font-size: 15px;
+  line-height: 1.5;
+  text-shadow: none;
+}
+html[data-theme="phenom"] :is(h1, h2, h3, h4, h5, h6) {
+  font-family: 'Oswald', 'Impact', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+html[data-theme="phenom"] h1 { font-weight: 700; }
+html[data-theme="phenom"] :is(code, pre, kbd) { font-family: 'Roboto Mono', monospace; }
+html[data-theme="phenom"] .font-sans { font-family: 'Roboto Mono', 'Courier New', monospace; }
+html[data-theme="phenom"] [data-brand-name] { font-family: 'Oswald', 'Impact', sans-serif !important; }
+html[data-theme="phenom"] ::selection { background: rgba(215, 52, 41, 0.4); }

@@ -11,6 +11,7 @@ import TemplateOnboarding from "@/components/TemplateOnboarding";
 import { Providers } from "./providers";
 import "./globals.css";
 import "./telos/_v7/styles.css";
+import "./themes/phenom.css";
 
 export const metadata: Metadata = {
   title: "Pulse | Home",
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" className="dark" data-theme={process.env.NEXT_PUBLIC_PULSE_THEME || undefined} suppressHydrationWarning>
       <head>
         {/* Pre-paint: applies observer class + route scope before first render so
             a reload with observer on never flashes personal data. */}
